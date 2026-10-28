@@ -86,8 +86,14 @@ class Boy:
     def draw(self):
         if self.state in ('RUN', 'AutoRun'):
             row = 100 if self.face_dir == 1 else 0
+            draw_size = 100
+            if self.state == 'AutoRun':
+                draw_size = int(
+                    100 * self.machine.get_state('AutoRun').SIZE_MULTIPLIER
+                )
             self.image.clip_draw(
-                self.frame * 100, row, 100, 100, self.x, self.y
+                self.frame * 100, row, 100, 100, self.x, self.y,
+                draw_size, draw_size,
             )
             return
 

@@ -5,6 +5,7 @@ from transitions.core import State
 
 class AutoRun(State):
     SPEED_MULTIPLIER = 2
+    SIZE_MULTIPLIER = 1.5
 
     def __init__(self, name, **kwargs):
         super().__init__(name, **kwargs)
