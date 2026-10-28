@@ -47,6 +47,12 @@ class Boy:
                     'after': '_reset_idle_timer',
                 },
                 {
+                    'trigger': 'interrupt_auto_run',
+                    'source': 'AutoRun',
+                    'dest': 'RUN',
+                    'before': '_set_direction',
+                },
+                {
                     'trigger': 'start_run',
                     'source': ['IDLE', 'SLEEP'],
                     'dest': 'RUN',

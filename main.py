@@ -35,6 +35,8 @@ def handle_events():
             boy.start_run(direction=direction)
         elif boy.state == 'RUN':
             boy.set_direction(direction)
+        elif boy.state == 'AutoRun':
+            boy.interrupt_auto_run(direction=direction)
     elif boy.state == 'RUN':
         boy.stop_run()
 
