@@ -43,6 +43,9 @@ class AutoRunTests(unittest.TestCase):
         game.boy = self.boy
         self.send_key(game.SDL_KEYDOWN, game.SDLK_a)
         self.assertNotEqual(self.boy.state, 'AutoRun')
+        self.boy.sleep()
+        self.send_key(game.SDL_KEYDOWN, game.SDLK_a)
+        self.assertEqual(self.boy.state, 'SLEEP')
 
     def test_direction_key_interrupts_auto_run_and_preserves_run_input(self):
         self.boy.start_auto_run()
@@ -64,14 +67,24 @@ class AutoRunTests(unittest.TestCase):
         self.boy.update()
         self.assertEqual(self.boy.x, 725)
         self.assertEqual(self.boy.face_dir, -1)
+        self.boy.x = 80
+        self.boy.face_dir = -1
+        self.boy.update()
+        self.assertEqual(self.boy.x, 75)
+        self.assertEqual(self.boy.face_dir, 1)
 
     def test_timeout_returns_to_idle_at_five_seconds(self):
         auto_run = self.boy.machine.get_state('AutoRun')
         with patch('auto_run.time.monotonic', return_value=100):
             self.boy.start_auto_run()
+        with patch('boy.time.monotonic', return_value=104.999):
+            self.boy.update()
+        self.assertEqual(self.boy.state, 'AutoRun')
+        position_before_expiry = self.boy.x
         with patch('boy.time.monotonic', return_value=105):
             self.boy.update()
         self.assertEqual(self.boy.state, 'IDLE')
+        self.assertEqual(self.boy.x, position_before_expiry)
         self.assertEqual(self.boy.idle_started_at, 105)
         self.assertIsNone(auto_run.started_at)
 
