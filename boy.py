@@ -41,6 +41,12 @@ class Boy:
                     'dest': 'AutoRun',
                 },
                 {
+                    'trigger': 'auto_run_timeout',
+                    'source': 'AutoRun',
+                    'dest': 'IDLE',
+                    'after': '_reset_idle_timer',
+                },
+                {
                     'trigger': 'start_run',
                     'source': ['IDLE', 'SLEEP'],
                     'dest': 'RUN',
@@ -61,7 +67,9 @@ class Boy:
                 self.sleep()
                 return
         if self.state == 'AutoRun':
-            self.machine.get_state('AutoRun').update(self, time.monotonic())
+            auto_run = self.machine.get_state('AutoRun')
+            if auto_run.update(self, time.monotonic()):
+                self.auto_run_timeout()
             return
         if self.state == 'RUN':
             self.x = max(

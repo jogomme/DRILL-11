@@ -4,6 +4,7 @@ from transitions.core import State
 
 
 class AutoRun(State):
+    DURATION_SECONDS = 5
     SPEED_MULTIPLIER = 2
     SIZE_MULTIPLIER = 1.5
 
@@ -21,6 +22,9 @@ class AutoRun(State):
         self.started_at = None
 
     def update(self, boy, now):
+        if now - self.started_at >= self.DURATION_SECONDS:
+            return True
+
         half_width = boy.HALF_WIDTH * self.SIZE_MULTIPLIER
         left_edge = half_width
         right_edge = boy.CANVAS_WIDTH - half_width
