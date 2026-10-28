@@ -51,6 +51,7 @@ class Boy:
                     'source': 'AutoRun',
                     'dest': 'RUN',
                     'before': '_set_direction',
+                    'after': '_reset_idle_timer',
                 },
                 {
                     'trigger': 'start_run',
@@ -93,7 +94,7 @@ class Boy:
     def set_direction(self, direction):
         self.face_dir = direction
 
-    def _reset_idle_timer(self):
+    def _reset_idle_timer(self, **kwargs):
         self.idle_started_at = time.monotonic()
         self.frame = 0
 
