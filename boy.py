@@ -4,6 +4,8 @@ import time
 from pico2d import load_image
 from transitions import Machine
 
+from auto_run import AutoRun
+
 
 class Boy:
     CANVAS_WIDTH = 800
@@ -18,7 +20,7 @@ class Boy:
         self.idle_started_at = time.monotonic()
         self.machine = Machine(
             model=self,
-            states=['IDLE', 'RUN', 'SLEEP'],
+            states=['IDLE', 'RUN', 'SLEEP', AutoRun(name='AutoRun')],
             initial='IDLE',
             auto_transitions=False,
             transitions=[
@@ -32,6 +34,11 @@ class Boy:
                     'source': 'SLEEP',
                     'dest': 'IDLE',
                     'after': '_reset_idle_timer',
+                },
+                {
+                    'trigger': 'start_auto_run',
+                    'source': 'IDLE',
+                    'dest': 'AutoRun',
                 },
                 {
                     'trigger': 'start_run',
