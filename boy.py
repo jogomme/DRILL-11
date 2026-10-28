@@ -60,6 +60,9 @@ class Boy:
             if time.monotonic() - self.idle_started_at >= 5:
                 self.sleep()
                 return
+        if self.state == 'AutoRun':
+            self.machine.get_state('AutoRun').update(self, time.monotonic())
+            return
         if self.state == 'RUN':
             self.x = max(
                 self.HALF_WIDTH,
@@ -81,7 +84,7 @@ class Boy:
         self.frame = 0
 
     def draw(self):
-        if self.state == 'RUN':
+        if self.state in ('RUN', 'AutoRun'):
             row = 100 if self.face_dir == 1 else 0
             self.image.clip_draw(
                 self.frame * 100, row, 100, 100, self.x, self.y

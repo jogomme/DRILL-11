@@ -16,3 +16,8 @@ class AutoRun(State):
     def exit(self, event_data):
         super().exit(event_data)
         self.started_at = None
+
+    def update(self, boy, now):
+        boy.x += boy.face_dir * boy.RUN_SPEED
+        boy.frame = (boy.frame + 1) % 8
+        return False
