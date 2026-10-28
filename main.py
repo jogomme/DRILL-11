@@ -71,13 +71,22 @@ def render_world():
 
 running = True
 
-open_canvas()
-reset_world()
-# game loop
-while running:
-    handle_events()
-    update_world()
-    render_world()
-    delay(0.01)
-# finalization code
-close_canvas()
+
+def run():
+    global running
+
+    running = True
+    open_canvas()
+    try:
+        reset_world()
+        while running:
+            handle_events()
+            update_world()
+            render_world()
+            delay(0.01)
+    finally:
+        close_canvas()
+
+
+if __name__ == '__main__':
+    run()
