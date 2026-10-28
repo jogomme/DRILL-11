@@ -21,6 +21,20 @@ class AutoRun(State):
         self.started_at = None
 
     def update(self, boy, now):
-        boy.x += boy.face_dir * boy.RUN_SPEED * self.SPEED_MULTIPLIER
+        half_width = boy.HALF_WIDTH * self.SIZE_MULTIPLIER
+        left_edge = half_width
+        right_edge = boy.CANVAS_WIDTH - half_width
+        next_x = (
+            boy.x
+            + boy.face_dir * boy.RUN_SPEED * self.SPEED_MULTIPLIER
+        )
+        if next_x <= left_edge:
+            boy.x = left_edge
+            boy.face_dir = 1
+        elif next_x >= right_edge:
+            boy.x = right_edge
+            boy.face_dir = -1
+        else:
+            boy.x = next_x
         boy.frame = (boy.frame + 1) % 8
         return False
